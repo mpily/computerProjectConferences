@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+{% import "bootstrap/wtf.html" as wtf %}
+
+<head>
+</head>
+<body>
+
+  <!-- For loop logic of jinja template -->
+  {%for aconf in conf%}
+   {{aconf.description}}
+  {%endfor%}
+  <h>THE WORKSHOPS THAT WILL BE PRESENT ARE </h>
+  <ol>
+     {%for workshop in workshops%}
+       <li><a href="/Workshop/{{workshop.id}}/" >{{workshop}}</a></li>
+     {%endfor%}
+  </ol>
+  <form action= " {{url_for('admin.add_workshop',confid=conf[0].id)}}" >
+      <input type="submit" value="Add a workshop" />
+  </form>
+  <p>we are doing something</p>
+</body>

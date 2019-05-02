@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+
+<head>
+</head>
+<body>
+{{ utils.flashed_messages() }}
+  <!-- For loop logic of jinja template -->
+  {%for ashop in shops%}
+   {{ashop.description}}
+  {%endfor%}
+<p>
+   total registered attendees are :{{totattend.count()}}
+</p>
+   {{ wtf.quick_form(form) }}
+
+  <p>we are doing something</p>
+</body>

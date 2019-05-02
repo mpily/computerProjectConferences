@@ -1,0 +1,28 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+    {% if add_workshop %}
+        Add workshop
+    {% else %}
+        Edit workshop
+    {% endif %}
+{% endblock %}
+{% block body %}
+<div class="content-section">
+ <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <div class="center">
+            {% if add_workshop %}
+                <h1>Add workshop</h1>
+            {% else %}
+                <h1>Edit workshop</h1>
+            {% endif %}
+            <br/>
+            {{ wtf.quick_form(form) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

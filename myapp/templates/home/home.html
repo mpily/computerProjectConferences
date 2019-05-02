@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+{% import "bootstrap/wtf.html" as wtf %}
+<html>
+<head>
+ {{monthname}} / {{year}}
+ </head>
+ <ul class="nav navbar-nav navbar-right">
+    <li><a href="{{ url_for('home.homepage') }}">Home</a></li>
+    <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+</ul>
+ <table>
+  <tr>
+    <th>Sunday</th>
+    <th>Monday</th>
+    <th>Tuesday</th>
+    <th>Wednesday</th>
+    <th>Thursday</th>
+    <th>Friday</th>
+    <th>Saturday</th>
+  </tr>
+
+  {%for week in month%}
+      <tr>
+        {%for day in week%}
+        {% if  day.event == 0 %}
+          <td>{{day}}</td>
+        {%else%}
+        <td><a href="/Conference/{{day.event}}/">{{day}}</a></td>
+        {%endif%}
+        {%endfor%}
+      </tr>
+  {%endfor%}
+
+</table>
+<form action="" method="post">
+  <input type="hidden" name="prevmonth" value={{monthname}} />
+  <input type="hidden" name="prevyear" value={{year}} />
+  <button name="foo" value="month">Next Month</button>
+</form>
+
+
+<form action="" method="post">
+  <input type="hidden" name="prevmonth" value={{monthname}} />
+  <input type="hidden" name="prevyear" value={{year}} />
+  <button name="foo" value="year">Next Year</button>
+</form>
+<form action= "{{url_for('admin.add_conference')}}">
+    <input type="submit" value="Add a conference" />
+</form>
+</body>
+</html>
