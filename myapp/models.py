@@ -15,6 +15,7 @@ class Conference(db.Model):
     description = db.Column(db.String(200))
     startdate = db.Column(db.Date,unique=True)
     enddate = db.Column(db.Date,unique=True)
+    registrationClosed = db.Column(db.Boolean,default=False)
 
 
     def __repr__(self):
@@ -30,7 +31,7 @@ class Workshop(db.Model):
     starttime = db.Column(db.DateTime)
     endtime = db.Column(db.DateTime)
     duration = db.Column(db.Interval)
-    conference_id= db.Column(db.Integer, db.ForeignKey('conferences.id'))
+    conference_id= db.Column(db.Integer, db.ForeignKey('conferences.id',ondelete='CASCADE'))
 
     def __repr__(self):
         return self.description
@@ -78,12 +79,25 @@ def load_user(user_id):
 class Attend(db.Model):
     """create a view for the attendees workshop"""
     __tablename__= 'attendees'
-    email= db.Column(db.String(60),db.ForeignKey('participants.email'),primary_key=True)
-    Workshhop_id= db.Column(db.Integer,db.ForeignKey('workshops.id'),primary_key=True)
+    email= db.Column(db.String(60),db.ForeignKey('participants.email',ondelete='CASCADE'),primary_key=True)
+    Workshhop_id= db.Column(db.Integer,db.ForeignKey('workshops.id',ondelete='CASCADE'),primary_key=True)
 
 class Room(db.Model):
-    """create a table forr the rooms that will be used """
+    ''' create a table forr the rooms that will be used '''
     __tablename__='rooms'
     room_number=db.Column(db.Integer,primary_key=True)
     floor_number=db.Column(db.Integer,primary_key=True)
     capacity = db.Column(db.Integer,primary_key=True)
+
+class Event(db.Model):
+    ''' create a view for the events that will give us the room  workshop and number of people attending'''
+    __tablename__='events'
+    room_number=db.Column(db.Integer,db.ForeignKey('rooms.room_number'),primary_key=True)
+    floor_number=db.Column(db.Integer,db.ForeignKey('rooms.floor_number'),primary_key=True)
+    workshop_id=db.Column(db.Integer,db.ForeignKey('workshops.id'),primary_key=True,unique=True)
+    workshopname=db.Column(db.String(60))
+    participants=db.Column(db.Integer)
+    starttime = db.Column(db.DateTime)
+    endtime = db.Column(db.DateTime)
+    def __repr__(self):
+        return self.workshopname

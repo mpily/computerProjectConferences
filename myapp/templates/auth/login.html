@@ -1,5 +1,7 @@
 {% import "bootstrap/utils.html" as utils %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+{%block body%}
 <div class="content-section">
   <br/>
   {{ utils.flashed_messages() }}
@@ -10,3 +12,4 @@
     {{ wtf.quick_form(form) }}
   </div>
 </div>
+{%endblock%}

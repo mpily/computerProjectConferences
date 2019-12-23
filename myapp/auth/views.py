@@ -4,7 +4,7 @@ from flask_login import login_required, login_user, logout_user
 from . import auth
 from .forms import LoginForm, RegistrationForm
 from .. import db
-from ..models import Participant
+from ..models import Participant,Workshop,Room,Event
 
 
 @auth.route('/register', methods=['GET', 'POST'])
@@ -59,6 +59,10 @@ def login():
     return render_template('auth/login.html', form=form, title='Login')
 
 
+
+
+
+
 @auth.route('/logout')
 @login_required
 def logout():
@@ -70,3 +74,4 @@ def logout():
     flash('You have successfully been logged out.')
 
     # redirect to the login page
+    return redirect(url_for('auth.login'))

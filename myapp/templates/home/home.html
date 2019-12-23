@@ -1,16 +1,103 @@
 <!DOCTYPE HTML>
 {% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
 <html>
+
+
 <head>
- {{monthname}} / {{year}}
- </head>
- <ul class="nav navbar-nav navbar-right">
-    <li><a href="{{ url_for('home.homepage') }}">Home</a></li>
-    <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-</ul>
- <table>
+  <style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+    text-align: left;
+  }
+  header {
+    margin: 20px;
+    padding: 10px;
+    text-align: center;
+    font-size: 50px;
+
+
+  }
+
+
+ * Dropdown Button */
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 560px;
+  font-size: 560px;
+  border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  border-radius: 12px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+button[name=foo], button[class=dropbtn]{
+  background-color: #4C64AF;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+ body{
+   background: url(../img/intro-bg.jpg) no-repeat center center;
+ }
+</style>
+</head>
+<body>
+<div class = 'intro-header'>
+<div class="content-section">
+<header>ENGINEERING STUDENTS ORGANISATION</header>
+
+ <table style="width:80%%;margin-top:30px; margin-left:200px;">
+   <caption>{{monthname}} / {{year}}</caption>
   <tr>
+
     <th>Sunday</th>
     <th>Monday</th>
     <th>Tuesday</th>
@@ -45,8 +132,35 @@
   <input type="hidden" name="prevyear" value={{year}} />
   <button name="foo" value="year">Next Year</button>
 </form>
+<form action="" method="post">
+  <input type="hidden" name="prevmonth" value={{monthname}} />
+  <input type="hidden" name="prevyear" value={{year}} />
+  <button name="foo" value="pmonth">Previous Month</button>
+</form>
+<form action="" method="post">
+  <input type="hidden" name="prevmonth" value={{monthname}} />
+  <input type="hidden" name="prevyear" value={{year}} />
+  <button name="foo" value="pyear">Previous Year</button>
+</form>
+{%if current_user.is_authenticated%}
+ {%if current_user.is_admin%}
 <form action= "{{url_for('admin.add_conference')}}">
     <input type="submit" value="Add a conference" />
+ {%endif%}
+{%endif%}
+
+</form>
+<div class="dropdown">
+ <button class="dropbtn">Conferences</button>
+ <div class="dropdown-content">
+   {%for conf in conferences%}
+   <a href="/Conference/{{conf.id}}/">{{conferences[0]}} {{conf.startdate}}</a>
+   {%endfor%}
+    </div>
+</div>
+</div>
+{%endblock%}
+</div>
 </form>
 </body>
 </html>

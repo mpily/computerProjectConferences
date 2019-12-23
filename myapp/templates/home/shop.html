@@ -1,19 +1,100 @@
 <!DOCTYPE HTML>
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "bootstrap/utils.html" as utils %}
-
+{% extends "base.html" %}
+{%block body%}
 <head>
+  <style>
+  input[type=button], input[type=submit], input[type=reset] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  button[name=foo], button[class=dropbtn]{
+    background-color: #4C64AF;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+   p{
+     display: block;
+   margin-top: 1em;
+   margin-bottom: 1em;
+   margin-left: 2em;
+   margin-right: 2em;
+   color : blue;
+  }
+</style>
 </head>
+
 <body>
+  <div class="content-section">
+    <br/>
 {{ utils.flashed_messages() }}
   <!-- For loop logic of jinja template -->
   {%for ashop in shops%}
-   {{ashop.description}}
+  <p> {{ashop.description}} it will be held from {{ashop.starttime}} to {{ashop.endtime}}</p>
   {%endfor%}
+  {%if current_user.is_authenticated%}
+  {%if current_user.is_admin%}
+  <table>
+    <caption>Attendants</caption>
+   <tr>
+     <th>Email</th>
+   </tr>
+
+   {%for attendant in totattend%}
+       <tr>
+           <td>{{attendant.email}}</td>
+
+       </tr>
+    {%endfor%}
+  </table>
+  {%endif%}
+  {%endif%}
 <p>
    total registered attendees are :{{totattend.count()}}
 </p>
-   {{ wtf.quick_form(form) }}
+
+<p>
+  maximum attendance is {{maxpop}}
+</p>
+{%if current_user.is_authenticated%}
+{%if totattend.count() < maxpop%}
+<form action="" method="post">
+  <button name="foo" value="register">register</button>
+</form>
+{%endif%}
+<form action="" method="post">
+
+  <button name="foo" value="deregister">deregister</button>
+</form>
+ {%if current_user.is_admin%}
+
+
+<form action= "{{url_for('admin.edit_workshop',shopid=shops[0].id)}}">
+    <input type="submit" value="Edit a workshop" />
+</form>
+    <form action= "{{url_for('admin.delete_workshop',shopid=shops[0].id)}}">
+        <input type="submit" value="delete a workshop" />
+    </form>
+
+
+ {%endif%}
+{%endif%}
+
 
   <p>we are doing something</p>
+</div>
 </body>
+{%endblock%}

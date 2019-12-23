@@ -1,22 +1,111 @@
 <!DOCTYPE HTML>
 {% import "bootstrap/wtf.html" as wtf %}
-
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+{%block body%}
 <head>
+      <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+      <style>
+      table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+      th, td {
+        padding: 5px;
+        text-align: left;
+      }
+      input[type=button], input[type=submit], input[type=reset] {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        border-radius: 12px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      button[name=foo], button[class=dropbtn]{
+        background-color: #4C64AF;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      </style>
 </head>
-<body>
 
+<body>
   <!-- For loop logic of jinja template -->
+  <div class="content-section">
+    <br/>
+    {{ utils.flashed_messages() }}
+    <br/>
+
+
+<p>
   {%for aconf in conf%}
    {{aconf.description}}
   {%endfor%}
-  <h>THE WORKSHOPS THAT WILL BE PRESENT ARE </h>
+</p>
+ {%if conf[0].registrationClosed%}
+ <table style="width:80%%;margin-top:30px; margin-left:200px;">
+   <caption>{{monthname}} / {{year}}</caption>
+  <tr>
+
+    <th>Room number</th>
+    <th>Floor number</th>
+    <th>Workshop name</th>
+    <th>Participants</th>
+    <th>starttime</th>
+    <th>endtime</th>
+
+  </tr>
+
+  {%for event in events%}
+      <tr>
+          <td> {{event.room_number}}</td>
+          <td>{{event.floor_number}}</td>
+          <td> {{event.workshopname}} </td>
+          <td>{{event.participants}}</td>
+          <td>{{event.starttime}}</td>
+          <td>{{event.endtime}}</td>
+      </tr>
+  {%endfor%}
+
+</table>
+<form action= " {{url_for('admin.openregistration',confid=conf[0].id)}}" >
+    <input type="submit" value="Open registration" />
+</form>
+ {%else%}
   <ol>
      {%for workshop in workshops%}
        <li><a href="/Workshop/{{workshop.id}}/" >{{workshop}}</a></li>
      {%endfor%}
   </ol>
-  <form action= " {{url_for('admin.add_workshop',confid=conf[0].id)}}" >
-      <input type="submit" value="Add a workshop" />
-  </form>
+
+  {%if current_user.is_authenticated%}
+   {%if current_user.is_admin%}
+   <form action= " {{url_for('admin.add_workshop',confid=conf[0].id)}}" >
+       <input type="submit" value="Add a workshop" />
+   </form>
+  <form action= "{{url_for('admin.edit_conference',confid=conf[0].id)}}">
+      <input type="submit" value="Edit a conference" />
+    </form>
+
+      <form action= " {{url_for('admin.endregistration',confid=conf[0].id)}}" >
+          <input type="submit" value="Close registration" />
+      </form>
+      <form action= "{{url_for('admin.delete_conference',confid=conf[0].id)}}">
+          <input type="submit" value="delete a conference" />
+        </form>
+   {%endif%}
+  {%endif%}
   <p>we are doing something</p>
+{%endif%}
+</div>
+
+  {%endblock%}
 </body>
